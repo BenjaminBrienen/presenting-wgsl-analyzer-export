@@ -1075,7 +1075,7 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
 #pause
 - Validate more parts of WGSL code for correctness
 #pause
-- Bring wgsl-analyzer up to speed with internal refactoring in rust-analyzer
+- Internal refactors
 #pause
 - Implement more Naga extensions
 #pause
