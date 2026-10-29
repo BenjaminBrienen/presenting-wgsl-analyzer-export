@@ -1,5 +1,7 @@
 #import "@preview/touying:0.8.0": *
-#import themes.university: *
+#import "better-theme.typ": *
+
+#set figure(numbering: none)
 
 #let link-row(logo, label, url, qr) = grid(
   columns: (4cm, 1fr, 4cm),
@@ -74,10 +76,7 @@
 #title-slide()
 
 #speaker-note[
-  // fix these?
   Speakers notes will appear on the second screen.
-
-  Apologies for the mixed use of "I"/"we" and "me"/"us" throughout.
 ]
 
 == Who am I?
@@ -151,25 +150,33 @@
 
 == What's the problem?
 
-- Programming in WGSL is a sub-par experience
-- Tooling that exists for other languages doesn't exist for WGSL.
+// - Programming in WGSL is a sub-par experience
+// - Tooling that exists for other languages doesn't exist for WGSL.
 
-#pause
-Solution: Language support in your editor of choice.
+#figure(
+  box(radius: 6pt, clip: true, image("assets/problem-demo/sample.png", width: 75%)),
+  caption: [Tooling that exists for other languages doesn't exist for WGSL],
+)
 
-#meanwhile
 #speaker-note[
-  #sn(1)[
-    - Compare to what you get when writing your host code
-    - When you write Rust or TypeScript, your code editor does all sorts of fancy things.
-    - The difference between a simple code editor and an "IDE" is whether it actively helps you work in that language.
-      - We want programming to be more fun by leveraging your computer to its potential.
-  ]
-  #sn(2)[
-    - What if you could get feedback about what you typed directly in your code editor?
-    - What if your code editor had features that helped you better understand what is written?
-    - What if it made writing code easier with intelligent suggestions?
-  ]
+  - Compare to what you get when writing your host code
+  - When you write Rust or TypeScript, your code editor does all sorts of fancy things.
+  - The difference between a simple code editor and an "IDE" is whether it actively helps you work in that language.
+    - We want programming to be more fun by leveraging your computer to its potential.
+]
+
+
+== What's the solution?
+
+#figure(
+  box(radius: 6pt, clip: true, image("assets/problem-demo/sample-fixed.png", width: 75%)),
+  caption: [Language support in your editor of choice.],
+)
+
+#speaker-note[
+  - What if you could get feedback about what you typed directly in your code editor?
+  - What if your code editor had features that helped you better understand what is written?
+  - What if it made writing code easier with intelligent suggestions?
 ]
 
 == What already exists?
@@ -335,8 +342,8 @@ Rust is pretty different from WGSL.
 #speaker-note[
   - WGSL isn't stable enough to be worth supporting multiple editions
   - Analyzing host code would mean a massive increase in the complexity of the language server when we can instead ask users to put their WGSL code into `.wgsl` files.
-  - Supporting multiple of these would exponentially increase complexity
-  - Supporting bespoke systems uses up a lot of maintainer effort for a small number of users
+  - Bespoke code-sharing or preprocessing solutions are out of scope
+  - Supporting multiple of these would exponentially increase complexity and use up a lot of maintainer effort for a small number of users
 ]
 
 == What is LSP?
@@ -353,7 +360,7 @@ Rust is pretty different from WGSL.
 
   Having a standard for this lets us support many code editors, so long as they have built-in support for LSP or a plugin system that enables the community to add LSP support.
 
-  The editor communicates with a background process that handles requests such as "show me the completions" or notifications such as "this document contents changed".
+  The editor communicates with a background process that handles requests such as "show me the completions" or notifications such as "this document's contents changed".
 ]
 
 == So let's make it
@@ -379,6 +386,13 @@ Rust is pretty different from WGSL.
 
 #v(1fr)
 
+#speaker-note[
+  - wgsl-analyzer is a language server implementation for WebGPU Shading Language
+  - It provides IDE features based on semantic analysis of WGSL code
+
+  And here are some links. These will also be available at the end.
+]
+
 == wgsl-analyzer meta
 
 #v(20%)
@@ -391,9 +405,22 @@ First commit was in October 2021. I adopted it in March 2025.
 - 718 stars on GitHub
 - 100+ people following development on Discord and Matrix
 
+#speaker-note[
+
+  The first commit was in October 2021, but I adopted it in March 2025.
+
+  Here are some stats.
+]
+
 == Demo
 
 #slide(config: config-info(logo: none))[#image("assets/demo/install_and_use.gif")]
+
+#speaker-note[
+  Here is a quick demo of installing the VS Code extension and using some features.
+
+  I'll go over some of the most important features.
+]
 
 == Syntax Highlighting
 
@@ -416,12 +443,16 @@ First commit was in October 2021. I adopted it in March 2025.
 
 #align(center, [#image("assets/capabilities/diagnostics.png")])
 
+#speaker-note[
+  We have both our own diagnostics based on parsing and semantic analysis as well as external diagnostics from other tooling such as WGSL compilers
+]
+
 == Go-to Definition
 
 #align(center, [#image("assets/capabilities/goto_definition.png")])
 
 #speaker-note[
-  - Navigate to where something is declared, such as a function or variable
+  - Lets you navigate to where something such as a function or variable is declared
   - Even works on some builtins
 ]
 
@@ -442,6 +473,8 @@ First commit was in October 2021. I adopted it in March 2025.
 
   - It currently works in function contexts
   - More contexts and context-sensitive completions is to-do
+
+  (click to show other demo)
 ]
 
 #slide(config: config-info(logo: none))[#image("assets/Bevy/autocomplete.webp")]
@@ -470,6 +503,12 @@ First commit was in October 2021. I adopted it in March 2025.
   #align(center, [#image("assets/capabilities/formatting_before.png")])
 ][
   #align(center, [#image("assets/capabilities/formatting_after.png")])
+][
+  #align(center, [#image("assets/Bevy/format-document-imports.webp")])
+][
+  #align(center, [#image("assets/Bevy/format-document.webp")])
+][
+  #align(center, [#image("assets/Bevy/format-selection.webp")])
 ]
 
 #speaker-note[
@@ -477,6 +516,8 @@ First commit was in October 2021. I adopted it in March 2025.
   - A standard style makes code more readable
   - If used consistently, less noise in changes
   - Also available as a standalone CLI tool called `wgslfmt`, especially useful in a CI check
+
+  (click through demos)
 ]
 
 == VS Code Extension
@@ -484,9 +525,9 @@ First commit was in October 2021. I adopted it in March 2025.
 #align(center, [#image("assets/capabilities/vscode.png")])
 
 #speaker-note[
-  - The VS Code extension is available on Visual Studio Marketplace and open-vsx
+  - It is available on Visual Studio Marketplace and open-vsx
   - It has many extra features that are experimental LSP extensions, so it has a more complex "front end"
-  - VS Code extension and the language server native binary are both called "wgsl-analyzer"
+  - The  extension and the language server itself are both called "wgsl-analyzer"
   - Works on Visual Studio Code, Codium, and vscode.dev
 ]
 
@@ -496,7 +537,7 @@ First commit was in October 2021. I adopted it in March 2025.
 
 #speaker-note[
   node package for web workers
-  - Server binary as a WASM package for web workers
+  - Basically, the server binary as a WASM package
     - Can be used on web playgrounds (think, shadertoy)
     - Maybe someday on webgpufundamentals.org
 ]
@@ -506,7 +547,7 @@ First commit was in October 2021. I adopted it in March 2025.
 #align(center, [#image("assets/capabilities/zed.png")])
 
 #speaker-note[
-  Zed plugin that installs and registers the language server
+  It installs and registers the language server
 ]
 
 == Other Editors
@@ -542,11 +583,13 @@ Try it at #link("https://play.wesl-lang.dev")
 #speaker-note[
   We said that we don't want to support every bespoke shader preprocessor, but we do want to enable that use case, so we teamed up with a group authoring an extension to WGSL called WESL.
 
+  It mainly adds imports and conditional compilation.
+
   The idea of WESL is that the features are actually upstreamed to WGSL. The WESL team is directly working with the WebGPU committee on these proposals.
 
   Stick around for the next talk and learn more about it.
 
-  You can try it *with* wgsl-analyzer on the WESL playground. Yes, wgsl-analyzer has a WASM build!
+  You can try it *with* wgsl-analyzer on the WESL playground.
 ]
 
 == WESL Playground
@@ -580,7 +623,7 @@ Try it at #link("https://play.wesl-lang.dev")
 #pause
 - Google - dawn
 #pause
-- Netflix - ?
+- Netflix
 #pause
 - Bevy and Bevy users; the latest version of Bevy replaces `naga_oil` with `wesl-rs`
 #pause
@@ -591,14 +634,15 @@ Try it at #link("https://play.wesl-lang.dev")
 #speaker-note[
   #alternatives[
     From conversations with users and seeing who is filing issues on our GitHub:
-    developers at high-profile companies:
+
+    Some developers at high-profile companies:
   ][
     Apparently someone at Microsoft is programming their quantum computer with wgsl-analyzer, I don't know. That's Microsoft Quantum Development Kit.
   ][
     Google engineers working on their WebGPU implementation "dawn" asked for an integration with their shader compiler and validator "tint" so that they could throw away their own unmaintained language server.
     So, for context, Chromium uses dawn/tint, Firefox uses wgpu/Naga.
   ][
-    Someone working at Netflix
+    Someone from Netflix filed some issues and contributed
   ][
     Bevy, of course. That's how I got here. We work with them directly for feedback on the user experience. Also, Bevy users.
   ][
@@ -655,7 +699,7 @@ Other WGSL utilities are called directly by wgsl-analyzer:
       - Learning material for rust-analyzer works for wgsl-analyzer too
   ]
   #sn(2)[
-    - Each library solves a specific problem and can be tested independently
+    - Each internal library solves a specific problem and can be tested independently
   ]
 ]
 
@@ -783,7 +827,7 @@ Other WGSL utilities are called directly by wgsl-analyzer:
 ]
 
 #speaker-note(subslide: 3)[
-  It is built on top of IDE features. When it receives a request, it calls one of the handlers from this layer. Those handlers use the analysis engine as context, use the relevant information, and create the appropriate response object.
+  It is built on top of IDE features. When it receives a request, it calls one of the handlers from this layer. Those handlers use the analysis engine as context, get the relevant information, and create the appropriate response object.
 ]
 
 #speaker-note(subslide: 4)[
@@ -804,12 +848,12 @@ Other WGSL utilities are called directly by wgsl-analyzer:
 
 #speaker-note[
   - We do not want to recompile the universe when you change one function
-  - Split up language semantics into small, composable queries
+  - The semantics of WGSL are divided up into small, composable queries
   - Queries don't have to be reevaluated when the inputs are fresh
   - Salsa is a complex topic that could be its own talk
-  - Not regularly measured or benchmarked yet
-  - Will be more important once workspace analysis is implemented
-  - We do not benchmark it yet as it feels fast enough
+  - The analysis isn't regularly measured or benchmarked yet
+  - That will be more important once workspace analysis is implemented
+  - For now, we just know that it feels fast enough to not be noticeable
 ]
 
 == Best-Effort Analysis
@@ -821,7 +865,7 @@ Other WGSL utilities are called directly by wgsl-analyzer:
   - Example: "you can't add an `[error]` and an `i32`"
 
 #speaker-note[
-  - So do not require users to spend their effort focusing on w-a
+  - We do not want to require users to spend their time and effort on working around w-a
   - The signal-to-noise ratio must be extremely high or else users feel hindered/distracted
   - Error recovery needs to be good from top to bottom
   - We don't need to tell the user that they cannot add an `[error]` to an `i32` because the error "type" happened from a mistake "earlier" in the code. When they fix the original problem, maybe the addition operation is valid.
@@ -857,9 +901,10 @@ Other WGSL utilities are called directly by wgsl-analyzer:
 - All config should be user preferences, not project meta
 
 #speaker-note[
+  - Each user has their preferences
   - How much detail to show in inlay hints, for example
 
-  - If the user has to set up configuration in order for the language server or extension to understand their project, then that would probably have to be checked-in and shared among developers.
+  - If the user has to set up configuration in order for the language server to understand their project, then that would probably have to be checked-in and shared among developers working on that project, and we don't want that.
 ]
 
 == Every Project Is Different
@@ -877,8 +922,6 @@ Other WGSL utilities are called directly by wgsl-analyzer:
   - Also a UX issue
 
   - This has to be balanced with how much complexity we want in wgsl-analyzer
-    - For example, supporting multiple versions instead of the latest version
-    - No unified toolchain that includes tooling, compiler, and other components
 ]
 
 == Fast Delivery
@@ -891,7 +934,7 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
 - Requires a high quality bar and comprehensive tests to make this possible and reliable
 
 #speaker-note[
-  - We have nightly releases so that new stuff can be used in immediately.
+  - We have nightly releases so that new stuff is available to users immediately.
   - Marketplace and open-vsx have separate release and prerelease channels.
   - To make that possible, we want the main branch to never be broken.
   - We have lots of unit tests (mostly snapshot tests) and strict PR checks to catch regressions and prove the code
@@ -982,7 +1025,14 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
 - UX with Cargo is still rough
 
 #speaker-note[
-  "It supports X" can mean anything from "doesn't panic" to "watch us wield magic with this".
+  - People use cutting-edge features of WGSL. For example, immediates.
+  - "It supports X" can mean anything from "doesn't panic" to "watch us wield magic with this".
+  - People want more features!
+  - This really is the best (basically, the only) tool for what they want
+  - Open-source community is pretty friendly
+  - They really like what works
+  - They notice things that do not work
+  - UX with Cargo is still rough
 ]
 
 == Limited Bandwidth
@@ -995,9 +1045,10 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
 - Maintainers and contributors are volunteers
 
 #speaker-note[
+  - Adapting all features at once for WGSL is not feasible
   - It has to be done incrementally according to what feels important
   - Even pulling just one feature verbatim and filling in the blanks vertically leads to infinite rabbit-holes
-  - Sometimes, according to what sounds interesting and there is motivation for
+  - Maintainer time and effort is limited
   - Things get implemented when people ask/feel like it
   - People work on whatever they want whenever there is time and motivation
   - Everybody likes working on different things, so the more the merrier
@@ -1012,7 +1063,12 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
 - Polish user experience with Cargo
   - Get dependencies without extra setup
 
-== Long-Term Roadmap
+#speaker-note[
+  - Better WESL support, such as analyzing conditional transpilation properly
+  - Polishing the UX with Cargo, such as getting dependencies without any extra setup
+]
+
+== Medium-Term Roadmap
 
 #pause
 - Implement all WGSL language extensions from the WGSL spec
@@ -1038,7 +1094,6 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
   - Call hierarchy
   - Semantic tokens provider
   - Snippets
-  - Other experimental LSP stuff
 ])
 #meanwhile
 #speaker-note[
@@ -1082,7 +1137,7 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
   - Quirks of LSP-capable editors
   - WGSL is hard to analyze.
     - For example, struct memory layout depends on where it gets used and the spec is written in a way such that knowing the types of expressions alone isn't enough information to validate statements.
-    - Derivative functions and other items are only valid in certain contexts, not encoded in function signature.
+    - Derivative functions and other items are only valid in certain contexts, not encoded in function signatures.
 ]
 
 == Wrong Assumptions
@@ -1103,10 +1158,12 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
   ][
     - The differences between Rust and WGSL are big enough that some "core" concepts don't apply
       - rust-analyzer only has to support one "ecosystem", workspace discovery in WGSL is completely different
+      - there is no "WGSL toolchain" or "source root" where builtins live
   ][
     - rust-analyzer had a lot of internal refactors that make it harder to pull changes
       - The project will get there eventually, but refactoring competes for time budget
   ][
+    - There are sometimes blockers from upstream that are annoying
     - Lots of proposals to improve the LSP specification get no attention
     - Dependencies can be slow to fix trivial maintenance and vulnerability advisories
     - Tons of open issues and PRs not receiving attention
@@ -1136,7 +1193,6 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
   #sn(2)[
     - Certain design decisions that make the developer UX good in one way create an awful developer UX in another way
     - Specifically, with shaders, everything that gets computed at runtime and passed from host-code is a challenge for static analysis tools
-    - A human brain reading code is performing static analysis
     - When you look at prior art, you learn a lot
   ]
 
@@ -1145,8 +1201,7 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
   ]
 
   #sn(4)[
-    - When they ask about a specific issue they have, it is motivating
-      - I can help you!
+    - When users ask about a specific issue they have, it is motivating. "I can help you!""
   ]
 ]
 
@@ -1157,8 +1212,14 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
 - wgsl-analyzer fills a gap in the user-experience of writing shaders
 - It is ready to use, but also has a lot to-do
 - It is a fun project to hack on with active maintainers willing to provide almost any level of guidance you need
-- I learned a lot personally while working on it
 - Please try it out and give feedback
+
+#speaker-note[
+  - wgsl-analyzer fills a gap in the user-experience of writing shaders
+  - It is ready to use, but also has a lot to-do
+  - It is a fun project to hack on with active maintainers willing to provide almost any level of guidance you need
+  - Please try it out and give feedback!
+]
 
 == `return;`
 
