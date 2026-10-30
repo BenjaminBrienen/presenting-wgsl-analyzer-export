@@ -110,13 +110,10 @@
 #speaker-note[
   #block(width: 100%, height: 80%, fit-text[
     Hello everyone! I am Benjamin Brienen.
-    #linebreak() My family and I are immigrants to the Netherlands.
-    #linebreak() A couple years ago, I decided to look for an interesting project to contribute to.
-    #linebreak() Video games, programming, and game development are long-time passions of mine.
+    #linebreak() I am a hobbyist and wanted something fun, interesting, and useful to work on in my free time.
     #linebreak() I found an open source game engine project called Bevy which was a perfect fit.
     #linebreak() I got nerd-sniped into an issue related to shader programming tooling and long story short, I found wgsl-analyzer.
     #linebreak() However, it wasn't working properly and was unmaintained, so I adopted ownership and maintenance of the project.
-    #linebreak() Everyone needs a hobby!
     #linebreak() I work on wgsl-analyzer almost every day, although many days are project management, reviewing code, and discussions with other contributors.
     #linebreak() Ok, now...
   ])
@@ -134,11 +131,9 @@
 
     Let me get a feel for what experience we have in the audience:
 
-    Raise your hand if you are a software engineer.
+    Raise your hand if you are a programmer.
 
-    Put your hand down if you are *not* a programmer.
-
-    Put your hand down if you don't author shaders.
+    Put your hand down if you are not a shader developer.
 
     Put your hand down if you don't use WebGPU Shading Language, #linebreak() a.k.a W-G-S-L or WGSL.
   ]
@@ -913,8 +908,7 @@ Other WGSL utilities are called directly by wgsl-analyzer:
 
 - wgsl-analyzer should do smart things to eliminate the need for "setup"
 - Use your existing project manifest to see what tools you're using
-  - Cargo integration
-  - wesl-rs and Naga detection is TODO
+  - Cargo and npm integration
 
 #speaker-note[
   - Checking-in dev tool configuration is a barrier for most teams. for example, devs should be free to use whatever tool they like most.
@@ -968,7 +962,7 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
 
 #speaker-note[
   - Development happens "here"
-  - Made by humans, for humans. Artisanal code
+  - Made by humans, for humans. Artisanal code.
   - Anybody can contribute. All levels of experience and familiarity
   - Guidance is available to people wanting to contribute
   - Welcoming, accessible, and friendly
@@ -1077,8 +1071,6 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
 #pause
 - Internal refactors
 #pause
-- Implement more Naga extensions
-#pause
 - Language server capabilities that can be implemented:
 
 #components.adaptive-columns([
@@ -1098,19 +1090,15 @@ When you contribute something to wgsl-analyzer, your whole team can already use 
 #meanwhile
 #speaker-note[
   #sn(2)[
-    - Many of the newer WGSL language extensions are not implemented yet such as buffer types and subgroups
+    - Many of the newer WGSL language extensions are not implemented yet such as buffer types and subgroups. Right now it does give errors for some valid WGSL code.
   ]
 
   #sn(3)[
-    - We can add more validation to catch more kinds of mistakes such as using derivative functions from the wrong kind of entry point
+    - We can add more validation to catch more kinds of mistakes such as using derivative functions from the wrong kind of entry point. So, right now it doesn't give some errors for some invalid WGSL code.
   ]
 
   #sn(4)[
     - Copying features from rust-analyzer is more difficult than it should be because of refactors that we haven't done yet
-  ]
-
-  #sn(5)[
-    - Naga extensions are cool and in-demand, but we don't support all of them yet. Some are used in Bevy or are nearing a state to be upstreamed into standard WGSL.
   ]
 
   #sn(6)[
