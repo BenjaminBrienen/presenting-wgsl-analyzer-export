@@ -62,7 +62,7 @@
   aspect-ratio: "16-9",
   config-common(
     breakable: false,
-    show-notes-on-second-screen: right,
+    show-notes-on-second-screen: none,
   ),
   config-info(
     title: "wgsl-analyzer",
